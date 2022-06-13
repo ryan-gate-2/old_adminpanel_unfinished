@@ -35,7 +35,6 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      */
     public function boot()
     {
-        
         parent::boot();
 
         Nova::mainMenu(function (Request $request) {
@@ -128,7 +127,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         Gate::define('viewNova', function ($user) {
             return in_array($user->email, [
-                //
+                
             ]);
         });
     }

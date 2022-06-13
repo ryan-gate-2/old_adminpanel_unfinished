@@ -18,15 +18,6 @@ class DueGgrPerProvider extends Partition
      */
     public function calculate(NovaRequest $request)
     {
-
-        $request->user()->notify(
-            NovaNotification::make()
-                ->message('Your complete game transaction history is ready for download.')
-                ->action('Download', URL::remote('https://example.com/report.pdf'))
-                ->icon('download')
-                ->type('info')
-        );
-        
         return $this->count($request, BillingPerProvider::where('ownedBy', auth()->user()->id), 'revenueBet');
     }
 

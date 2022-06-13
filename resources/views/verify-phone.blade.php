@@ -9,12 +9,7 @@
     <title>Verification </title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/cover/">
-
-    
-
-    <!-- Bootstrap core CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
     <style>
       .bd-placeholder-img {
@@ -87,64 +82,30 @@ body {
 
     </style>
 
-    
-    <!-- Custom styles for this template -->
   </head>
   <body class="d-flex h-100 text-center text-white" style="background: #04060c;">
-    
-
-@php
-
-$getHttp = Http::get('https://api.dk.games/v2:709:1fCdsFe/listGames?apikey=USD:0dda2681-e3a0-4411-88ce-13beaf075dab&userid=1.USD.9999-USD&game=hab-o-jungle-rumble&mode=real');
-$decode = json_decode($getHttp);
-
-@endphp
-
-
-
 
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
   <main class="px-3">
-    
-
-@foreach($decode as $image)
   <div class="container mt-4">
-<div style="margin: 5px;">
-<img src="https://img.davidkohen.com/v2/image_sq_alt{{ $image->image_id }}">
-</div>
-</div>
-@endforeach
-  <div class="container mt-4">
-  @if(session('status'))
-    <div class="alert alert-warning">
-        {{ session('status') }}
-    </div>
-  @endif
-
       <form name="verify-phone-form" id="verify-phone-form" method="post" action="{{url('verification-form-phone')}}">
        @csrf
         <div class="form-group mb-2">
           <input type="text" id="phonenumber" name="phonenumber" placeholder="Enter verification code.." class="form-control" required="">
         </div>
         <div class="d-grid gap-2">        <button type="submit" class="btn btn-primary mt-2 btn-lg">Submit</button>
-
-</div>
+  </div>
       </form>
-
     <div class="mb-5">
       <form name="verify-phone-sendcode-form" id="verify-phone-sendcode-form" method="post" action="{{url('verify-phone-sendcode')}}">
        @csrf
-    <div class="d-grid gap-1"> 
+    <div class="d-grid gap-1">
         <button type="submit" class="btn btn-outline-primary mt-2 btn-small">Send SMS Verification Code</button>
     </div>
       </form>
   </div>
-</div>  
-  </main>
-
 </div>
-
-
-    
+  </main>
+	</div>
   </body>
 </html>

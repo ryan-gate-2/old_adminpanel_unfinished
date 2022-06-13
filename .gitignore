@@ -16,3 +16,5 @@ yarn-error.log
 /storage/cache/*
 /vendor_old
 tests
+auth.json
+
