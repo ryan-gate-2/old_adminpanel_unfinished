@@ -1,64 +1,54 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+**OLD API - Potentially Unsafe**
+** Readme is WIP while I compile all the shit I've made for free-use ** 
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Free for anyone to use, this is the middleware used for handling casino games in general, please see other gits in my profile for the admin interface and the game-launcher frontend (optional).
 
-## About Laravel
+You should check code thoroughly, as I'm not sure if this was the latest version for when it was used - make sure to manually import database to mysql/mariadb, there is support for mongoDB.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+** MongoDB/Multi Database support **
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+The API basically is writing the game transactions as they happen in a seperate table/database for it be processed afterwards in queue system for actual GGR payment from the operator user, so what I did was write the actual middleware (unprocessed) in mongoDB then have the helper that runs every 1 minute from the admin environment simply copy it in a mysql/relational database for archiving/review/ggr process purposes.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+MongoDB has much much more room for errors as it is pretty much writing json as it happens, instead of filling per field. 
 
-## Learning Laravel
+** SMS Login **
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Admin area supports SMS login, which at the time I considered as one of most safe ways to process 2fa (this opinion turned out diff hehe @Softswiss eSIM).
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+** Error Handling **
 
-## Laravel Sponsors
+There is an extensive error handler, which can be turned on per operator specifically also by operator themselves, after which for 10 minutes (at a time) the operator can review all game transactions as they happen live in special area within admin area.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+There is error/warning level system, depending on level specific actions are taken, such as closing down automatically of operator's API access and notifying them and you per text msg & telegram & email.
 
-### Premium Partners
+** Automatic GGR **
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+You can set interval for operator to be charged within the admin area, you can fill in amount of days for a cycle. Operator can ofcourse at anytime check & review his current GGR costs.
 
-## Contributing
+Invoices are automatically generated and sent per notification to you and to the operator. There is support to work on a balance level, also to protect mainly yourself but also operator you can set various levels to warn operator of high GGR (for example hacked site sor whatever can incur this) and also an amount at which the operator access gets closed down.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+** Currency **
 
-## Code of Conduct
+In theory all currencies are available, there is a pretty straightforward currency module where you can add in any currency/currency API. All is displayed both in the played currency and the value of currency in USD$ (AT THE TIME OF THE GAME). 
+Currency prices are updated every 15 minute, there are some straight forward protectional stuff against that, for instance currency can not drop or go higher for X% (I believe I set it to 30%).
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+You can edit this all in the console commands area.
 
-## Security Vulnerabilities
+** Access Profiles **
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+You can create & make access profiles, basically it's a role system but you can select the currencies an 'profile' can access which in turn you can assign to specific operator API keys.
 
-## License
+You can set some other things like:
+	[*] max_hourly_demosessions
+	[*] max_hourly_callback_errors
+	[*] max_hourly_createsession_errors
+	[*] branded (theming system for gamelauncher, toggle 0 or 1 to disable/enable)
+	[*] branded_launcher_baseurl (base url to the actual gamelauncher itself, you can find more at other git, this can also be handy if you wish to illegal games so you can set the gamelauncher/iframe really easy per operator seperated from your legitimate business)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+** Game Tracking & Logging **
+
+Extensive tracking of game sessions, for example origin place and also it tracks player individually so you can easily create patterns and/or adapt and change which games to display to each player.
+
+Also includes general stuff using browser detection. This can be handy again if you wish to put illegal games or on contrary want to protect your games/providers from illegal gambling areas more indepth.
+
+"{"visit_2":{"host":"launch.slotts.io","referrer":0,"browserdetect-device":"desktop","browserdetect-os":"Chrome 100.0.4896","browserdetect-devicefamily":"Unknown","browserdetect-devicegrade":"","browserdetect-browser":"Chrome 100.0.4896","user-agent":"Mozilla\/5.0 (X11; Linux x86_64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/100.0.4896.88 Safari\/537.36"}}"
